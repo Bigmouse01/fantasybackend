@@ -3,7 +3,9 @@ const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://footballfantasyfront.netlify.app",
+}));
 const PORT = 3001;
 
 const API_KEY = "6748b5a727b789718caac2a7c23aad5f"; // Replace with your real API key
@@ -55,7 +57,7 @@ function calculateFantasyPoints(player, stats) {
   return Math.round(fantasyPoints);
 }
 
-app.get("/player-odds", async (req, res) => {
+app.get("/api/player-odds", async (req, res) => {
   const playerName = req.query.name;
   if (!playerName) {
     return res.status(400).json({ error: "Player name required" });
