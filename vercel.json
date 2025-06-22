@@ -1,24 +1,12 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "players.js",
-      "use": "@vercel/node"
-    }
+    { "src": "players.js", "use": "@vercel/node" },
+    { "src": "player-photo.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/player",
-      "dest": "/players.js"
-    },
-    {
-      "src": "/players",
-      "dest": "/players.js"
-    },
-    {
-  "src": "/player-photo",
-  "dest": "/player-photo.js"
-}
-
+    { "src": "/player", "dest": "/players.js" },
+    { "src": "/players", "dest": "/players.js" },
+    { "src": "/player-photo", "dest": "/player-photo.js" }
   ]
 }
