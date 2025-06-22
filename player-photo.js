@@ -18,15 +18,15 @@ module.exports = async (req, res) => {
     );
 
     const data = await response.json();
-    const photo = data.response?.[0]?.player?.photo;
+    const photo = data?.response?.[0]?.player?.photo;
 
     if (photo) {
-      res.status(200).json({ photo });
+      return res.status(200).json({ photo });
     } else {
-      res.status(404).json({ error: 'Player photo not found' });
+      return res.status(404).json({ error: 'Photo not found' });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to fetch player photo' });
+    return res.status(500).json({ error: 'Error fetching photo' });
   }
 };
