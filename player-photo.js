@@ -1,37 +1,39 @@
 module.exports = async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://footballfantasyfront.netlify.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
   const { name } = req.query;
-
-  if (!name) return res.status(400).json({ error: 'Missing player name' });
-
-  const tryFetch = async (queryName) => {
-    const apiRes = await fetch(
-      `https://v3.football.api-sports.io/players?search=${encodeURIComponent(queryName)}&league=39&season=2023`,
-      {
-        headers: {
-          'x-apisports-key': 'ac73f34a4e2b591d2c12ad067e4a157a'
-        }
-      }
-    );
-    const data = await apiRes.json();
-    return data.response?.[0]?.player?.photo || null;
-  };
+  if (!name) {
+    return res.status(400).json({ error: "Name query param required" });
+  }
 
   try {
-    let photo = await tryFetch(name);
+    const apiKey = "ac73f34a4e2b591d2c12ad067e4a157a";
+    const response = await fetch(
+      `https://v3.football.api-sports.io/players?search=${encodeURIComponent(name)}&league=39&season=2023`,
+      {
+        headers: {
+          "x-apisports-key": apiKey,
+        },
+      }
+    );
 
-    // If full name fails, try last word (usually surname)
-    if (!photo && name.includes(' ')) {
-      const lastName = name.split(' ').slice(-1)[0];
-      photo = await tryFetch(lastName);
+    const data = await response.json();
+    const player = data.response?.[0]?.player;
+
+    if (!player || !player.photo) {
+      return res.status(404).json({ error: "Player not found in API" });
     }
 
-    if (photo) {
-      return res.status(200).json({ photo });
-    } else {
-      return res.status(404).json({ error: 'Player not found in API' });
-    }
+    return res.status(200).json({ photo: player.photo });
   } catch (err) {
-    console.error('[player-photo.js] error:', err);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("API Fetch Error:", err);
+    return res.status(500).json({ error: "Server error" });
   }
 };
