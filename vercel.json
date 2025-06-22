@@ -5,8 +5,8 @@
     { "src": "player-photo.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/player", "dest": "/players.js" },
     { "src": "/players", "dest": "/players.js" },
+    { "src": "/player", "dest": "/players.js" },
     { "src": "/player-photo", "dest": "/player-photo.js" }
   ]
 }
