@@ -1,14 +1,19 @@
-{ 
-    "builds":[
-        {
-            "src":"./server.js",
-            "use":"@vercel/node"
-        }
-    ],
-    "routes":[
-        {
-            "src":"/(.*)",
-            "dest":"/server.js"
-        }
-    ]
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/players.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/player",
+      "dest": "/api/players.js"
+    },
+    {
+      "src": "/players",
+      "dest": "/api/players.js"
+    }
+  ]
 }
