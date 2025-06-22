@@ -37,11 +37,19 @@ function calculateFantasyPoints(player) {
   points -= yellowCards * 1;
   points -= redCards * 3;
 
-  // Optionally: Add more factors (e.g., clean sheets, saves for GK, etc.)
   return points;
 }
 
 module.exports = (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://footballfantasyfront.netlify.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   const { name } = req.query;
   if (name) {
     const player = players.find(p => p.Player === name);
@@ -52,7 +60,6 @@ module.exports = (req, res) => {
       res.status(404).json({ error: 'Player not found' });
     }
   } else {
-    // return all players sorted by fantasy points descending
     const withPoints = players.map(p => ({
       ...p,
       fantasyPoints: calculateFantasyPoints(p)
